@@ -8,8 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Filament\Panel;
+use Filament\Models\Contracts\FilamentUser;
+use App\Models\Transaction;
+use App\Models\Shift;
+use App\Models\HousekeepingTask;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
@@ -23,6 +30,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
+        'phone_number',
     ];
 
     /**
@@ -36,6 +46,28 @@ class User extends Authenticatable
         'two_factor_recovery_codes',
         'remember_token',
     ];
+
+    // Filament v5 Authorization
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Only active users can log in to the admin panel
+        return $this->is_active === true;
+    }
+
+    // Relationships for Cluster 3 & 4
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+    public function shifts(): HasMany
+    {
+        return $this->hasMany(Shift::class);
+    }
+    public function housekeepingTasks()
+    {
+        return $this->hasMany(HousekeepingTask::class);
+    }
+
 
     /**
      * Get the attributes that should be cast.
@@ -58,7 +90,7 @@ class User extends Authenticatable
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
 }

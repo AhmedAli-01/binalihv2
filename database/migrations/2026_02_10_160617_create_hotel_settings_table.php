@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,8 @@ return new class extends Migration
     {
         Schema::create('hotel_settings', function (Blueprint $table) {
             $table->id();
+            $table->string('key')->unique(); // e.g., 'business_date', 'hotel_name'
+            $table->text('value');
             $table->timestamps();
         });
     }

@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class HotelSetting extends Model
 {
     //
+    protected $fillable = ['key', 'value'];
 }

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,9 @@ return new class extends Migration
     {
         Schema::create('folios', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('reservation_id')->constrained()->cascadeOnDelete();
+            $table->string('status')->default('Open'); // Open, Closed
+            $table->decimal('balance', 10, 2)->default(0.00);
             $table->timestamps();
         });
     }
