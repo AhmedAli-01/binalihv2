@@ -16,6 +16,11 @@ use App\Models\Shift;
 use App\Models\HousekeepingTask;
 
 
+/**
+ * @property bool $is_active
+ * @property string $role
+ */
+
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -79,6 +84,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
